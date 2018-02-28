@@ -2,7 +2,7 @@ module MDT
   module Extensible
     def self.included(klass)
       klass.class_eval do
-        @@descendants = []
+        @descendants = []
         def self.key
           raise MDT::Errors::OverrideNeeded.new('key')
         end
@@ -12,12 +12,12 @@ module MDT
         end
 
         def self.inherited(subclass)
-          @@descendants << subclass
-          @@descendants.uniq!
+          @descendants << subclass
+          @descendants.uniq!
         end
 
         def self.descendants
-          @@descendants
+          @descendants
         end
       end
     end
