@@ -58,11 +58,12 @@ if dirchooser == nil
   exit 1
 end
 
-dirchooser = dirchooser.new
 unless dirchooser.subkeys.include?(dirchooser_value)
   puts "ERROR: Directory chooser set with key #{dirchooser_key} does not have a directory chooser with value #{dirchooser_value}."
   exit 1
 end
+
+dirchooser = dirchooser.new
 
 fetcher_config = subconfig['fetcher']
 unless fetcher_config.has_key?('type')
@@ -80,11 +81,12 @@ if fetcher == nil
   exit 1
 end
 
-fetcher = fetcher.new
 unless fetcher.subkeys.include?(fetcher_value)
   puts "ERROR: Fetcher set with key #{fetcher_key} does not have a fetcher with value #{fetcher_value}."
   exit 1
 end
+
+fetcher = fetcher.new
 
 root_contents = subconfig['contents']
 
