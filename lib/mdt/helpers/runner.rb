@@ -19,8 +19,8 @@ module MDT
               end
               cmd_key = cmd_config['type'].split('.').first
               cmd_value = cmd_config['type'].split('.').last
-              cmd_options = cmd_config['options']
-              cmd_modifiers = modifiers + (cmd_config['modifiers'] || [])
+              cmd_options = cmd_config['options'] || {}
+              cmd_modifiers = modifiers + (cmd_config['command_modifiers'] || [])
               cmd = MDT::Commands::Base.descendants.select { |c| c.key == cmd_key }.first
               if cmd == nil
                 puts "ERROR: Could not find a command set with key #{cmd_key}. Check its correctness or install needed MDT modules."
@@ -58,7 +58,7 @@ module MDT
                 end
               end
               puts "Executing command group: #{cg_config['name']}"
-              code = MDT::Helpers::Runner.process_contents(cg_config['contents'], modifiers + (cg_config['modifiers'] || []))
+              code = MDT::Helpers::Runner.process_contents(cg_config['contents'], modifiers + (cg_config['command_modifiers'] || []))
               if code == 0
                 puts "Command group: #{cg_config['name']} - finished with success"
               else
