@@ -30,6 +30,13 @@ module MDT
                 end
               end
               cmd = cmd.new
+              unless cmd.subkeys.include?(cmd_value)
+                puts "ERROR: Command set with key #{cmd_key} does not have a command with key #{cmd_value}!"
+                if cmd_config['break_on_failure']
+                  failure = true
+                  next
+                end
+              end
               code = cmd.execute(cmd_value, cmd_modifiers, cmd_options)
               if cmd_config['success_codes'].include?(code)
                 puts "Command exited with success code #{code}"

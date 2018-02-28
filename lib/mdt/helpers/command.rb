@@ -13,10 +13,14 @@ module MDT
           modifier_options = modifier_config['options']
           modifier = MDT::CommandModifiers::Base.descendants.select { |cm| cm.key == modifier_key }.first
           if modifier == nil
-            puts "WARNING: Could not find a command modifier with key #{modifier_key}. Check its correctness or install needed MDT modules."
+            puts "WARNING: Could not find a command modifier set with key #{modifier_key}. Check its correctness or install needed MDT modules."
             next
           end
           modifier = modifier.new
+          unless modifier.subkeys.include?(modifier_value)
+            puts "WARNING: Command modifier set with key #{modifier_key} does not have a command modifier with key #{modifier_value}."
+            next
+          end
           command = modifier.prepend(modifier_value, command, modifier_options)
         end
         command

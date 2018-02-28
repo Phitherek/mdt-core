@@ -54,11 +54,15 @@ dirchooser_options = dirchooser_config['options'] || {}
 
 dirchooser = MDT::DirectoryChoosers::Base.descendants.select { |dc| dc.key == dirchooser_key }.first
 if dirchooser == nil
-  puts "ERROR: Could not find a directory chooser with key #{dirchooser_key}. Check its correctness or install needed MDT modules."
+  puts "ERROR: Could not find a directory chooser set with key #{dirchooser_key}. Check its correctness or install needed MDT modules."
   exit 1
 end
 
 dirchooser = dirchooser.new
+unless dirchooser.subkeys.include?(dirchooser_value)
+  puts "ERROR: Directory chooser set with key #{dirchooser_key} does not have a directory chooser with value #{dirchooser_value}."
+  exit 1
+end
 
 fetcher_config = subconfig['fetcher']
 unless fetcher_config.has_key?('type')
@@ -72,11 +76,15 @@ fetcher_options = fetcher_config['options'] || {}
 
 fetcher = MDT::Fetchers::Base.descendants.select { |f| f.key == fetcher_key }.first
 if fetcher == nil
-  puts "ERROR: Could not find a fetcher with key #{fetcher_key}. Check its correctness or install needed MDT modules."
+  puts "ERROR: Could not find a fetcher set with key #{fetcher_key}. Check its correctness or install needed MDT modules."
   exit 1
 end
 
 fetcher = fetcher.new
+unless fetcher.subkeys.include?(fetcher_value)
+  puts "ERROR: Fetcher set with key #{fetcher_key} does not have a fetcher with value #{fetcher_value}."
+  exit 1
+end
 
 root_contents = subconfig['contents']
 
