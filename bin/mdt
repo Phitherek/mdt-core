@@ -99,23 +99,23 @@ end
 begin
   unless dirchooser.cd(dirchooser_value, dirchooser_options) == 0
     puts 'ERROR: Directory chooser could not enter a directory!'
-    dirchooser.rm(fetcher_value, fetcher_options)
+    dirchooser.rm(dirchooser_value, dirchooser_options)
     exit 1
   end
   unless fetcher.fetch(fetcher_value, fetcher_options) == 0
     puts 'ERROR: Fetcher could not fetch!'
-    dirchooser.rm(fetcher_value, fetcher_options)
+    dirchooser.rm(dirchooser_value, dirchooser_options)
     exit 1
   end
   unless MDT::Helpers::Runner.process_contents(root_contents) == 0
     puts 'ERROR: Deploy process ended with failure!'
-    dirchooser.rm(fetcher_value, fetcher_options)
+    dirchooser.rm(dirchooser_value, dirchooser_options)
     exit 1
   end
 rescue => e
   puts "Exception: #{e.message}"
   e.backtrace
-  dirchooser.rm(fetcher_value, fetcher_options)
+  dirchooser.rm(dirchooser_value, dirchooser_options)
   exit 1
 end
 
