@@ -112,7 +112,9 @@ begin
     dirchooser.rm(fetcher_value, fetcher_options)
     exit 1
   end
-rescue
+rescue => e
+  puts "Exception: #{e.message}"
+  e.backtrace
   dirchooser.rm(fetcher_value, fetcher_options)
   exit 1
 end
