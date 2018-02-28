@@ -3,3 +3,4 @@
 .rvmrc
 .idea/
 *.iml
+config/mdt-deploy.yml

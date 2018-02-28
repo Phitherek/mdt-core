@@ -14,6 +14,10 @@ module MDT
       def cd(key, options = {})
         raise MDT::Errors::OverrideNeeded.new('cd')
       end
+
+      def rm(key, options = {})
+        raise MDT::Errors::OverrideNeeded.new('rm')
+      end
     end
   end
 end

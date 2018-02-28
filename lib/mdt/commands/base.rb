@@ -6,8 +6,8 @@ module MDT
     class Base
       include MDT::Extensible
 
-      def command(key, options = {})
-        raise MDT::Errors::OverrideNeeded.new('command')
+      def execute(key, modifiers = [], options = {})
+        raise MDT::Errors::OverrideNeeded.new('execute')
       end
     end
   end

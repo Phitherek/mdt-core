@@ -13,4 +13,9 @@ RSpec.describe MDT::DirectoryChoosers::Base do
     dc = MDT::DirectoryChoosers::Base.new
     expect { dc.cd('base') }.to raise_error(MDT::Errors::OverrideNeeded, 'Method cd must be overriden in a subclass!')
   end
+
+  it 'requires rm to be overriden in a subclass' do
+    dc = MDT::DirectoryChoosers::Base.new
+    expect { dc.rm('base') }.to raise_error(MDT::Errors::OverrideNeeded, 'Method rm must be overriden in a subclass!')
+  end
 end

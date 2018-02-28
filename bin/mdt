@@ -1,1 +1,111 @@
 #!/usr/bin/env ruby
+require 'mdt-core'
+require 'yaml'
+require 'optparse'
+puts "Modular Deployment Tool (MDT) v. #{MDT::Core::VERSION} (C) 2018 by Phitherek_"
+Gem::Specification.select { |g| g.name.downcase.include?('mdt-') }.each do |g|
+  if require g.name.downcase
+    puts "Autoload: #{g.name.downcase} v. #{g.version}"
+  end
+end
+script_opts = {}
+script_opts[:config_path] = 'config/mdt-deploy.yml'
+op = OptionParser.new do |opts|
+  opts.banner = "Usage: #{$0} [options] <config_key>"
+  opts.on('-c PATH', '--config PATH', 'Specifies deploy configuration file path (default: "config/mdt-deploy.yml")') do |path|
+    script_opts[:config_path] = path
+  end
+  opts.on('-h', '--help', 'Prints this help') do
+    puts opts
+    exit 0
+  end
+end
+
+op.parse!
+
+if ARGV.count < 1
+  puts op.banner
+end
+
+config = YAML.load_file(script_opts[:config_path])
+config_key = ARGV.last
+
+unless config.has_key?(config_key)
+  puts "ERROR: There is no config that matches config key: #{config_key}!"
+  exit 1
+end
+
+subconfig = config[config_key]
+unless subconfig.has_key?('directory_chooser') && subconfig.has_key?('fetcher') && subconfig.has_key?('contents')
+  puts 'ERROR: directory_chooser, fetcher and contents must be defined!'
+  exit 1
+end
+
+dirchooser_config = subconfig['directory_chooser']
+
+unless dirchooser_config.has_key?('type')
+  puts 'ERROR: directory_chooser.type must be defined!'
+  exit 1
+end
+
+dirchooser_key = dirchooser_config['type'].split('.').first
+dirchooser_value = dirchooser_config['type'].split('.').last
+dirchooser_options = dirchooser_config['options'] || {}
+
+dirchooser = MDT::DirectoryChoosers::Base.descendants.select { |dc| dc.key == dirchooser_key }.first
+if dirchooser == nil
+  puts "ERROR: Could not find a directory chooser with key #{dirchooser_key}. Check its correctness or install needed MDT modules."
+  exit 1
+end
+
+dirchooser = dirchooser.new
+
+fetcher_config = subconfig['fetcher']
+unless fetcher_config.has_key?('type')
+  puts 'ERROR: fetcher.type must be defined!'
+  exit 1
+end
+
+fetcher_key = fetcher_config['type'].split('.').first
+fetcher_value = fetcher_config['type'].split('.').last
+fetcher_options = fetcher_config['options'] || {}
+
+fetcher = MDT::Fetchers::Base.descendants.select { |f| f.key == fetcher_key }.first
+if fetcher == nil
+  puts "ERROR: Could not find a fetcher with key #{fetcher_key}. Check its correctness or install needed MDT modules."
+  exit 1
+end
+
+fetcher = fetcher.new
+
+root_contents = subconfig['contents']
+
+puts "Successfully loaded config: #{config_key}! Starting deploy..."
+
+unless dirchooser.mkdir(dirchooser_value, dirchooser_options) == 0
+  puts 'ERROR: Directory chooser could not create a directory!'
+  exit 1
+end
+begin
+  unless dirchooser.cd(dirchooser_value, dirchooser_options) == 0
+    puts 'ERROR: Directory chooser could not enter a directory!'
+    dirchooser.rm(fetcher_value, fetcher_options)
+    exit 1
+  end
+  unless fetcher.fetch(fetcher_value, fetcher_options) == 0
+    puts 'ERROR: Fetcher could not fetch!'
+    dirchooser.rm(fetcher_value, fetcher_options)
+    exit 1
+  end
+  unless MDT::Helpers::Runner.process_contents(root_contents) == 0
+    puts 'ERROR: Deploy process ended with failure!'
+    dirchooser.rm(fetcher_value, fetcher_options)
+    exit 1
+  end
+rescue
+  dirchooser.rm(fetcher_value, fetcher_options)
+  exit 1
+end
+
+puts 'Deploy process finished successfully!'
+exit 0
