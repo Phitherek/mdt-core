@@ -2,7 +2,7 @@ require_relative '../command_modifiers'
 module MDT
   module Helpers
     class Command
-      def apply_command_modifiers(command, modifiers)
+      def self.apply_command_modifiers(command, modifiers)
         modifiers.each do |modifier_config|
           unless modifier_config.has_key?('type')
             puts 'WARNING: Skipping command modifier because of missing type...'
