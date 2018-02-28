@@ -8,8 +8,9 @@ Gem::Specification.new do |s|
   s.description = 'Core of Modular Deployment Tool'
   s.authors = ['Phitherek_']
   s.email = ['phitherek@gmail.com']
-  s.files = []
+  s.files = Dir['lib/**/*.rb'] + Dir['bin/*']
   s.homepage = 'https://rubygems.org/gems/mdt-core'
-  s.licenses = ['MIT']
+  s.license = 'MIT'
+  s.executables << 'mdt'
   s.add_development_dependency 'rspec', '~> 3.7'
 end
