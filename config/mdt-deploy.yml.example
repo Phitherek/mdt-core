@@ -1,0 +1,40 @@
+example: # (required) Configuration key (e.g. environment). There can be multiple configurations with multiple configuration keys defined in one mdt-deploy.yml.
+  directory_chooser: # (required) Used to create, change to and, if needed, remove the deployment directory
+    type: example.chooser # (required) The type is key_of_set.key_of_particular_directory_chooser
+    options: # Options are passed on to directory chooser as a hash unmodified
+      directory: dir
+  fetcher: # (required) Used to fetch the project's code
+    type: example.fetcher # (required) The type is key_of_set.key_of_particular_fetcher
+    options: # Options are passed on to fetcher as a hash unmodified.
+      path: path
+  contents: # (required) Includes array of commands and command groups
+    - command: # (required) Defines execution of a command
+        type: example.command # (required) The type is key_of_set.key_of_particular_command
+        command_modifiers: # Used to prepend expressions to the command
+          - type: example.modifier # (required) The type is key_of_set.key_of_particular_command_modifier
+            options: # Options are passed on to modifier as a hash unmodified.
+              test: test
+        options: # Options are passed on to command as a hash unmodified.
+          test: test
+        success_codes: # Defines command success codes. By default only 0.
+          - 0
+        break_on_failure: true # Defines if exit code other than success_codes should fail the whole process. True by default.
+    - command_group: # (required) Defines a command group
+        name: Example # (recommended) Describes the command group
+        command_modifiers: # These modifiers are applied to all the group contents
+          - type: example.modifier
+            options:
+              test: test
+        break_on_failure: true # Defines if failure in this command group should fail the whole process. True by default.
+        contents: # (required) Includes array of commands and command groups
+          - command:
+              type: example.command
+              command_modifiers:
+                - type: example.modifier
+                  options:
+                    test: test
+              options:
+                test: test
+              success_codes:
+                - 0
+              break_on_failure: true
