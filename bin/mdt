@@ -114,7 +114,7 @@ begin
   end
 rescue => e
   puts "Exception: #{e.message}"
-  e.backtrace
+  puts e.backtrace
   dirchooser.rm(dirchooser_value, dirchooser_options)
   exit 1
 end
