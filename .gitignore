@@ -4,3 +4,4 @@
 .idea/
 *.iml
 config/mdt-deploy.yml
+*.gem
