@@ -42,3 +42,7 @@ MDT defines 5 modular objects that can be used to build a simple deploy flow. Th
 ## Contributing
 
 You can contribute to the development of MDT by submitting an issue or pull request. You can also extend MDT's capabilities by creating your own module in accordance with guidelines in MODULE_GUIDELINES.md and submitting it to RubyGems.
+
+## Documentation
+
+Generated RDoc documentation can be found [here](http://www.rubydoc.info/github/Phitherek/mdt-core "here").
