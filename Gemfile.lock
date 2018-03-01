@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mdt-core (0.0.1)
+    mdt-core (0.0.2)
 
 GEM
   remote: https://rubygems.org/
