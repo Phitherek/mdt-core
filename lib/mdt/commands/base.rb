@@ -10,9 +10,9 @@ module MDT
 
       # A method that defines how to execute a command and how to apply command modifiers. Raises MDT::Errors::OverrideNeeded.
       # Arguments:
-      # +key+ - a key identifier of a particular command
-      # +modifiers+ - an array of command modifier configurations - each configuration is a Hash that includes modifier type and modifier options
-      # +options+ - options for command as a Hash
+      # * +key+ - a key identifier of a particular command
+      # * +modifiers+ - an array of command modifier configurations - each configuration is a Hash that includes modifier type and modifier options
+      # * +options+ - options for command as a Hash
       def execute(key, modifiers = [], options = {})
         raise MDT::Errors::OverrideNeeded.new('execute')
       end

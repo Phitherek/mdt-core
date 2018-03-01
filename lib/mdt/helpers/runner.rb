@@ -5,8 +5,8 @@ module MDT
     class Runner
       # A method that processes an array of contents that includes configurations for commands and command groups.
       # Arguments:
-      # +contents+ - an array of configurations for commands and command groups. Refer to example configuration file in the code repository for structure description
-      # +modifiers+ - an array of configurations for command modifiers that have to be applied to every command defined in +contents+
+      # * +contents+ - an array of configurations for commands and command groups. Refer to example configuration file in the code repository for structure description
+      # * +modifiers+ - an array of configurations for command modifiers that have to be applied to every command defined in +contents+
       # Returns:
       # * 1 on failure, otherwise 0
       def self.process_contents(contents, modifiers = [])
