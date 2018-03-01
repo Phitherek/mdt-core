@@ -1,7 +1,15 @@
 require_relative '../command_modifiers'
 module MDT
+  # A module containing all helper classes
   module Helpers
+    # A helper class to be used when implementing commands
     class Command
+      # Finds and applies command modifiers to a command using passed modifiers configuration.
+      # Arguments:
+      # * +command+ - a command or expression to prepend command modifiers to
+      # * +modifiers+ - an array of modifier configurations - each configuration is a Hash that includes the modifier type and modifier options
+      # Returns:
+      # * Modified command
       def self.apply_command_modifiers(command, modifiers)
         modifiers.each do |modifier_config|
           unless modifier_config.has_key?('type')
