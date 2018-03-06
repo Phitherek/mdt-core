@@ -13,6 +13,8 @@ MDT is a deployment automation tool that is designed to be simple and easily ext
 
 Be sure to also install any modules that you need.
 
+Alternatively, please see [mdt](https://github.com/Phitherek/mdt "mdt") for the convenience gem providing the basic modules.
+
 ## Usage
 
 The gem installs an executable called `mdt` that is used in a way described below:
@@ -38,6 +40,7 @@ MDT defines 5 modular objects that can be used to build a simple deploy flow. Th
 ## Known modules
 
 * [mdt-dummy](https://github.com/Phitherek/mdt-dummy "mdt-dummy") - a module containing dummy implementations of each extensible MDT class. They can be used to skip a particular deployment step.
+* [mdt-simple](https://github.com/Phitherek/mdt-simple "mdt-simple") - a module that contains simple implementations for MDT.
 
 ## Contributing
 
