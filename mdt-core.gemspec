@@ -3,7 +3,7 @@ require_relative './lib/mdt/version'
 Gem::Specification.new do |s|
   s.name = 'mdt-core'
   s.version = MDT::Core::VERSION
-  s.date = '2018-03-08'
+  s.date = '2018-03-15'
   s.summary = 'MDT Core'
   s.description = 'Core of Modular Deployment Tool'
   s.authors = ['Phitherek_']
