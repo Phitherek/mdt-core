@@ -41,6 +41,7 @@ MDT defines 5 modular objects that can be used to build a simple deploy flow. Th
 
 * [mdt-dummy](https://github.com/Phitherek/mdt-dummy "mdt-dummy") - a module containing dummy implementations of each extensible MDT class. They can be used to skip a particular deployment step.
 * [mdt-simple](https://github.com/Phitherek/mdt-simple "mdt-simple") - a module that contains simple implementations for MDT.
+* [mdt-versioned](https://github.com/Phitherek/mdt-versioned "mdt-versioned") - a module that implements versioned releases deployment flow for MDT.
 
 ## Contributing
 
