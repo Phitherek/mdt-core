@@ -1,4 +1,16 @@
 example: # (required) Configuration key (e.g. environment). There can be multiple configurations with multiple configuration keys defined in one mdt-deploy.yml.
+  pre_contents: # Includes array of commands and command groups executed before the deploy process starts
+    - command:
+        type: example.command
+        command_modifiers:
+          - type: example.modifier
+            options:
+              test: test
+        options:
+          test: test
+        success_codes:
+          - 0
+        break_on_failure: true
   directory_chooser: # (required) Used to create, change to and, if needed, remove the deployment directory
     type: example.chooser # (required) The type is key_of_set.key_of_particular_directory_chooser
     options: # Options are passed on to directory chooser as a hash unmodified
@@ -38,3 +50,31 @@ example: # (required) Configuration key (e.g. environment). There can be multipl
               success_codes:
                 - 0
               break_on_failure: true
+  post_contents: # Includes array of commands and command groups executed after the deploy process starts
+    - command:
+        type: example.command
+        command_modifiers:
+          - type: example.modifier
+            options:
+              test: test
+        options:
+          test: test
+        status: success # Execute only if the deploy process ended successfully
+    - command:
+        type: example.command
+        command_modifiers:
+          - type: example.modifier
+            options:
+              test: test
+        options:
+          test: test
+        status: failure # Execute only if the deploy process ended with failure
+    - command:
+        type: example.command
+        command_modifiers:
+          - type: example.modifier
+            options:
+              test: test
+        options:
+          test: test
+        status: all # Execute regardless of the deploy process result

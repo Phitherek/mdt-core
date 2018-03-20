@@ -25,6 +25,7 @@ op.parse!
 
 if ARGV.count < 1
   puts op.banner
+  exit 0
 end
 
 config = YAML.load_file(script_opts[:config_path])
@@ -40,6 +41,8 @@ unless subconfig.has_key?('directory_chooser') && subconfig.has_key?('fetcher') 
   puts 'ERROR: directory_chooser, fetcher and contents must be defined!'
   exit 1
 end
+
+pre_contents = subconfig['pre_contents'] || []
 
 dirchooser_config = subconfig['directory_chooser']
 
@@ -89,8 +92,22 @@ end
 fetcher = fetcher.new
 
 root_contents = subconfig['contents']
+post_contents = subconfig['post_contents'] || []
 
 puts "Successfully loaded config: #{config_key}! Starting deploy..."
+
+puts 'Running pre-deploy commands...'
+
+begin
+  unless MDT::Helpers::Runner.process_contents(pre_contents)
+    puts 'ERROR: Pre-deploy process finished with failure!'
+    exit 1
+  end
+rescue => e
+  puts "Exception: #{e.message}"
+  puts e.backtrace
+  exit 1
+end
 
 unless dirchooser.mkdir(dirchooser_value, dirchooser_options) == 0
   puts 'ERROR: Directory chooser could not create a directory!'
@@ -99,25 +116,35 @@ end
 begin
   unless dirchooser.cd(dirchooser_value, dirchooser_options) == 0
     puts 'ERROR: Directory chooser could not enter a directory!'
+    puts 'Running post-deploy commands...'
+    MDT::Helpers::Runner.process_post_contents(post_contents, [], true)
     dirchooser.rm(dirchooser_value, dirchooser_options)
     exit 1
   end
   unless fetcher.fetch(fetcher_value, fetcher_options) == 0
     puts 'ERROR: Fetcher could not fetch!'
+    puts 'Running post-deploy commands...'
+    MDT::Helpers::Runner.process_post_contents(post_contents, [], true)
     dirchooser.rm(dirchooser_value, dirchooser_options)
     exit 1
   end
   unless MDT::Helpers::Runner.process_contents(root_contents) == 0
     puts 'ERROR: Deploy process ended with failure!'
+    puts 'Running post-deploy commands...'
+    MDT::Helpers::Runner.process_post_contents(post_contents, [], true)
     dirchooser.rm(dirchooser_value, dirchooser_options)
     exit 1
   end
 rescue => e
   puts "Exception: #{e.message}"
   puts e.backtrace
+  puts 'Running post-deploy commands...'
+  MDT::Helpers::Runner.process_post_contents(post_contents, [], true)
   dirchooser.rm(dirchooser_value, dirchooser_options)
   exit 1
 end
 
 puts 'Deploy process finished successfully!'
+puts 'Running post-deploy commands...'
+MDT::Helpers::Runner.process_post_contents(post_contents)
 exit 0
